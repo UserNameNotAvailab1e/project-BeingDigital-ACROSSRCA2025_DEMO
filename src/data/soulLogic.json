@@ -1,0 +1,29 @@
+{
+    "soul_parameters": {
+        "noise": {
+            "label": "Auditory Feedback",
+            "min": 0,
+            "max": 100,
+            "impact_on_cost": 1.5
+        },
+        "danger": {
+            "label": "Mortality Risk",
+            "min": 0,
+            "max": 100,
+            "impact_on_cost": 5.0
+        },
+        "inefficiency": {
+            "label": "Mechanical Resistance",
+            "min": 0,
+            "max": 100,
+            "impact_on_cost": 2.2
+        }
+    },
+    "glitch_thresholds": {
+        "minor": 30,
+        "major": 70,
+        "critical": 95
+    },
+    "cost_base_fee": 1000,
+    "cost_calculation": "base_fee * (noise * 1.5 + danger * 5.0 + inefficiency * 2.2)"
+}
