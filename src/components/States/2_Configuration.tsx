@@ -66,11 +66,19 @@ export const Configuration: React.FC = () => {
     const [acceptedRisk, setAcceptedRisk] = useState(false);
 
     useEffect(() => {
-        if (isCritical && !hasWarned) {
-            setShowThresholdWarning(true);
-            setHasWarned(true);
+        if (isCritical) {
+            if (!hasWarned) {
+                setShowThresholdWarning(true);
+                setHasWarned(true);
+            }
+        } else {
+            // Reset warning if we go back to safe levels
+            setHasWarned(false);
+            // Also optionally reset acceptedRisk if we want them to re-accept when going critical again?
+            // "3 factors, anytime slide to threshold, need popup" -> implies yes.
+            setAcceptedRisk(false);
         }
-    }, [isCritical, hasWarned]); // This should trigger for ANY slide since isCritical depends on all 3.
+    }, [isCritical, hasWarned]);
 
     // Calculate Glitch Intensity (0 to 1)
     // Only applies if acceptedRisk is true AND we are critical
@@ -131,7 +139,17 @@ export const Configuration: React.FC = () => {
 
             {/* Cost Index - Always visible in corner */}
             <div className="absolute top-8 right-8 md:top-12 md:right-12 text-right">
-                <p className="font-mono text-xs text-nostalgia-grey tracking-widest mb-1">PROJECTED COST</p>
+                <div className="flex items-center justify-end gap-2 mb-1 group relative">
+                    <p className="font-mono text-xs text-nostalgia-grey tracking-widest cursor-help">PROJECTED COST</p>
+                    <div className="relative">
+                        <button className="w-4 h-4 rounded-full border border-nostalgia-grey/50 flex items-center justify-center text-[8px] text-nostalgia-grey hover:bg-nostalgia-black hover:text-white transition-colors">?</button>
+                        <div className="absolute right-0 top-6 w-48 p-3 bg-white border border-nostalgia-black shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                            <p className="font-sans text-[10px] text-nostalgia-black text-left leading-relaxed">
+                                Real-time calculation of neuromorphic resource usage. Fluctuations indicate simulated market volatility and biological resistance.
+                            </p>
+                        </div>
+                    </div>
+                </div>
                 <div className={`font-mono text-xl md:text-3xl text-nostalgia-black ${isCritical ? 'rgb-split' : ''}`}>
                     $ <span className="blur-[1px]">{displayCost.toLocaleString('en-US', { maximumFractionDigits: 0, minimumIntegerDigits: 7 }).slice(0, -3)}</span>
                     <span className="opacity-50">{displayCost.toFixed(0).slice(-3)}</span> / sec

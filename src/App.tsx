@@ -82,13 +82,7 @@ function App() {
       </AnimatePresence>
 
       {/* Temporary Debugger to switch states */}
-      <div className="fixed bottom-4 right-4 z-50 flex gap-2 font-mono text-xs opacity-50 hover:opacity-100 transition-opacity">
-        <button onClick={() => useAppStore.getState().setState('IDLE')}>IDLE</button>
-        <button onClick={() => useAppStore.getState().setState('CONFIG')}>CONFIG</button>
-        <button onClick={() => useAppStore.getState().setState('PROCESSING')}>PROC</button>
-        <button onClick={() => useAppStore.getState().setState('EXPERIENCE')}>EXP</button>
-        <button onClick={() => useAppStore.getState().setState('RECEIPT')}>RCPT</button>
-      </div>
+
     </Layout>
   );
 }

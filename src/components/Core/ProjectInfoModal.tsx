@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { contributors } from '../../data/credits';
 
 export const ProjectInfoModal: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
-
-    const contributors = [
-        { name: "David", role: "Architecting the system logic and behavioral mechanics. Provide visual support" },
-        { name: "Florence", role: "Documenting the installation photographically." },
-        { name: "Haoyu Xue", role: "Make the summary report, write the plot, design the storyboard, conduct aesthetic design." },
-        { name: "Harry", role: "Help, understanding and expertise of the automotive sector" },
-        { name: "Vaibhav", role: "Design, development, and production of digital games." },
-    ];
 
     return (
         <>
