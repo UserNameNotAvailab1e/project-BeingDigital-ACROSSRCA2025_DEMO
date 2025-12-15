@@ -53,6 +53,7 @@ export const Configuration: React.FC = () => {
     }, [setCostIndex]);
 
     // Derived state for Critical Zone styling
+    // Critical if ANY value > 80
     const isCritical = config.danger > 80 || config.noise > 80 || config.inefficiency > 80;
 
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -61,42 +62,71 @@ export const Configuration: React.FC = () => {
     const [hasWarned, setHasWarned] = useState(false);
     const [showThresholdWarning, setShowThresholdWarning] = useState(false);
 
+    // User must accept risk to enable the visual glitching
+    const [acceptedRisk, setAcceptedRisk] = useState(false);
+
     useEffect(() => {
         if (isCritical && !hasWarned) {
             setShowThresholdWarning(true);
-            setHasWarned(true); // Only warn once per session to avoid annoying the user
+            setHasWarned(true);
         }
-    }, [isCritical, hasWarned]);
+    }, [isCritical, hasWarned]); // This should trigger for ANY slide since isCritical depends on all 3.
+
+    // Calculate Glitch Intensity (0 to 1)
+    // Only applies if acceptedRisk is true AND we are critical
+    const getMaxExcess = () => {
+        const d = Math.max(0, config.danger - 80);
+        const n = Math.max(0, config.noise - 80);
+        const i = Math.max(0, config.inefficiency - 80);
+        return Math.max(d, n, i); // Max excess is 20 (100 - 80)
+    };
+
+    const glitchIntensity = acceptedRisk ? (getMaxExcess() / 20) : 0;
+
+    // Dynamic styles for progressive glitch
+    const containerStyle = acceptedRisk ? {
+        filter: `blur(${glitchIntensity * 2}px)`,
+        transform: `translate(${Math.random() * glitchIntensity * 4}px, ${Math.random() * glitchIntensity * 4}px)` // Minimal shake handled by CSS class usually, but let's do inline for dynamic scale
+    } : {};
 
     return (
-        <div className={`w-full h-full flex flex-col md:flex-row p-8 md:p-24 relative transition-all duration-200 ${isCritical ? 'glitch-text' : ''}`}>
-            {/* Threshold Warning Modal */}
+        <div
+            className={`w-full h-full flex flex-col md:flex-row p-8 md:p-24 relative transition-all duration-200`}
+            style={containerStyle}
+        >
+            {/* Threshold Warning Modal - COLD & ELEGANT */}
             {showThresholdWarning && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm">
-                    <div className="bg-nostalgia-white p-8 max-w-sm border-2 border-red-500 shadow-[0_0_20px_rgba(255,0,0,0.3)] text-center">
-                        <h3 className="font-mono text-red-600 font-bold mb-4 animate-pulse">⚠ SYSTEM INSTABILITY DETECTED</h3>
-                        <p className="font-serif text-sm mb-6">
-                            Resource consumption is spiking. Continuing at these levels will drastically increase cognitive load and system cost.
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="bg-nostalgia-white p-12 max-w-sm border border-nostalgia-black shadow-2xl text-center"
+                    >
+                        <h3 className="font-serif text-xl mb-6 tracking-wide text-nostalgia-black">SYSTEM NOTICE</h3>
+                        <p className="font-mono text-xs mb-8 text-nostalgia-grey leading-relaxed">
+                            Asset volatility exceeding safety protocols (80%). Hardware instability is imminent.
                         </p>
                         <div className="flex gap-4 justify-center">
                             <button
                                 onClick={() => {
-                                    // Option to reduce levels (Manual for now, user just goes back)
                                     setShowThresholdWarning(false);
-                                    // Ideally we might reset sliders here, but let's just let them "choose to continue" by closing the modal
+                                    setAcceptedRisk(true); // Enable glitches
                                 }}
-                                className="px-4 py-2 bg-nostalgia-black text-nostalgia-white font-mono text-xs hover:bg-red-600"
+                                className="px-6 py-3 border border-nostalgia-black bg-transparent text-nostalgia-black font-mono text-[10px] tracking-widest hover:bg-nostalgia-black hover:text-white transition-colors"
                             >
                                 I UNDERSTAND. PROCEED.
                             </button>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             )}
 
-            {/* Background Chaos if Critical */}
-            {isCritical && (
-                <div className="absolute inset-0 z-[-1] opacity-10 bg-red-500 animate-pulse mix-blend-multiply pointer-events-none" />
+            {/* Background Chaos if Critical AND Accepted */}
+            {isCritical && acceptedRisk && (
+                <div
+                    className="absolute inset-0 z-[-1] bg-red-500 mix-blend-multiply pointer-events-none"
+                    style={{ opacity: glitchIntensity * 0.2 }}
+                />
             )}
 
             {/* Cost Index - Always visible in corner */}
@@ -108,7 +138,7 @@ export const Configuration: React.FC = () => {
                 </div>
             </div>
 
-            <div className={`flex-1 flex flex-col justify-center max-w-xl z-10 ${isCritical ? 'animate-[shake_0.5s_infinite]' : ''}`}>
+            <div className={`flex-1 flex flex-col justify-center max-w-xl z-10`}>
                 <motion.h2
                     className="font-serif text-3xl mb-12"
                     initial={{ opacity: 0, x: -20 }}
@@ -126,6 +156,7 @@ export const Configuration: React.FC = () => {
                 >
                     <RailSlider
                         label={soulLogic.soul_parameters.noise.label}
+                        description="Simulates the acoustic pressure of an internal combustion engine. Higher values induce temporary auditory threshold shifts."
                         min={soulLogic.soul_parameters.noise.min}
                         max={soulLogic.soul_parameters.noise.max}
                         value={config.noise}
@@ -135,6 +166,7 @@ export const Configuration: React.FC = () => {
 
                     <RailSlider
                         label={soulLogic.soul_parameters.danger.label}
+                        description="The probability of simulated catastrophic failure. Increases the release of adrenaline and cortisol neurotransmitters."
                         min={soulLogic.soul_parameters.danger.min}
                         max={soulLogic.soul_parameters.danger.max}
                         value={config.danger}
@@ -144,6 +176,7 @@ export const Configuration: React.FC = () => {
 
                     <RailSlider
                         label={soulLogic.soul_parameters.inefficiency.label}
+                        description="Introduces mechanical friction and resistance. Required to feel the 'weight' of the machine."
                         min={soulLogic.soul_parameters.inefficiency.min}
                         max={soulLogic.soul_parameters.inefficiency.max}
                         value={config.inefficiency}

@@ -1,74 +1,28 @@
-# React + TypeScript + Vite
+# The Nostalgia Broker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> "The automobile is dead. We re-forge the soul."
 
-Currently, two official plugins are available:
+A speculative service design prototype simulating a high-frequency trading terminal for intangible assets. This application allows users to configure and trade simulated "driving memories" through an unstable, brutalist interface.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Project Team
+**System Architecture & Design**
+*   **David**: System logic architecture, behavioral mechanics, visual support.
+*   **Florence**: Photographic documentation & installation.
+*   **Haoyu Xue**: Narrative summary, plot, storyboard, aesthetic design.
+*   **Harry**: Automotive sector expertise & domain knowledge.
+*   **Vaibhav**: Digital game design, development, and production.
 
-## React Compiler
+## Technology Stack
+*   **Core**: React 19, TypeScript, Vite
+*   **Styling**: Tailwind CSS v4
+*   **Animation**: Framer Motion
+*   **State Management**: Zustand
+*   **Effects**: Custom CSS Glitch Shaders, Granular Synthesis (Simulated)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# project-BeingDigital-ACROSSRCA2025_DEMO
+## Concept
+The application explores the commodification of sensory experiences in a post-automotive future. It features a 5-stage critical design flow:
+1.  **Attraction**: Biological Identity Verification.
+2.  **Configuration**: Asset customization (Auditory, Risk, Mechanical).
+3.  **Transaction**: Value assessment and ethical confirmation.
+4.  **Processing**: Neural path generation (Hallucination).
+5.  **Receipt**: Non-Fungible Memory (NFM) token issuance.
